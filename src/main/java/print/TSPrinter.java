@@ -35,8 +35,8 @@ public class TSPrinter {
         this.configuration = configuration;
     }
 
-    public String print(Class c, CompilationUnit compilationUnit) {
-        final TSPrintVisitor visitor = new TSPrintVisitor(configuration, c, compilationUnit);
+    public String print(CompilationUnit compilationUnit) {
+        final TSPrintVisitor visitor = new TSPrintVisitor(configuration, compilationUnit);
         compilationUnit.accept(visitor, null);
         return visitor.getSource();
     }

@@ -49,14 +49,12 @@ import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 public class TSPrintVisitor implements VoidVisitor<Void> {
     protected final TSPrinterConfiguration configuration;
     protected final SourcePrinter printer;
-    private Class visitFileClass;
     private CompilationUnit rootNode;
     private ArrayList<ClassOrInterfaceDeclaration> tsModules = new ArrayList<>();
 
-    public TSPrintVisitor(TSPrinterConfiguration prettyPrinterConfiguration, Class visitFileClass, CompilationUnit rootNode) {
+    public TSPrintVisitor(TSPrinterConfiguration prettyPrinterConfiguration, CompilationUnit rootNode) {
         configuration = prettyPrinterConfiguration;
         printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
-        this.visitFileClass = visitFileClass;
         this.rootNode = rootNode;
     }
 
@@ -223,7 +221,7 @@ public class TSPrintVisitor implements VoidVisitor<Void> {
         if (n.getPackageDeclaration().isPresent()) {
             n.getPackageDeclaration().get().accept(this, arg);
         }
-        printer.indent();
+//        printer.indent();
 
         n.getImports().accept(this, arg);
         if (!n.getImports().isEmpty()) {
@@ -242,8 +240,8 @@ public class TSPrintVisitor implements VoidVisitor<Void> {
                 printer.println();
             }
         }
-        printer.unindent();
-        printer.println("}");
+//        printer.unindent();
+//        printer.println("}");
 
         n.getModule().ifPresent(m -> m.accept(this, arg));
 
@@ -254,11 +252,11 @@ public class TSPrintVisitor implements VoidVisitor<Void> {
     public void visit(final PackageDeclaration n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
-        printer.print("namespace ");
-        n.getName().accept(this, arg);
-        printer.println(" {");
+//        printer.print("namespace ");
+//        n.getName().accept(this, arg);
+//        printer.println(" {");
 
-        printOrphanCommentsEnding(n);
+//        printOrphanCommentsEnding(n);
     }
 
     @Override
@@ -1634,12 +1632,12 @@ public class TSPrintVisitor implements VoidVisitor<Void> {
             warnNotSupport(n, "not support Asterisk in import");
             return;
         }
-        printer.print("import " + n.getName().getIdentifier() + " = ");
+        printer.print("import " + n.getName().getIdentifier() + " from \"");
 //        if (n.isStatic()) {
 //            printer.print("static ");
 //        }
         n.getName().accept(this, arg);
-        printer.println(";");
+        printer.println("\";");
 
         printOrphanCommentsEnding(n);
     }

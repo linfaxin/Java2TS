@@ -1,6 +1,3 @@
-import android.widget.DatePicker;
-import android.widget.TimePicker;
-
 import java.io.File;
 import java.io.FileWriter;
 
@@ -9,15 +6,15 @@ import java.io.FileWriter;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        convertClass(DatePicker.class);
-        convertClass(TimePicker.class);
+        convertClass("android.widget.DatePicker");
+        convertClass("android.widget.TimePicker");
     }
 
-    public static void convertClass(Class c) throws Exception {
-        File javaFile = new File("res/java/" + c.getName().replaceAll("\\.", "/") + ".java");
-        String tsSource = Java2TS.convertClassToTSCode(javaFile, c);
+    public static void convertClass(String className) throws Exception {
+        File javaFile = new File("res/java/" + className.replaceAll("\\.", "/") + ".java");
+        String tsSource = Java2TS.convertClassToTSCode(javaFile);
 
-        File outFile = new File("res/output_ts/" + c.getName().replaceAll("\\.", "/") + ".ts");
+        File outFile = new File("res/output_ts/" + className.replaceAll("\\.", "/") + ".ts");
         outFile.getParentFile().mkdirs();
         FileWriter fw = new FileWriter(outFile);
         fw.write(tsSource);
